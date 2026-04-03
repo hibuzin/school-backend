@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 const locationRoutes = require("./routes/location")(io);
-app.use("/api/bus", locationRoutes);
+app.use("/api/location", locationRoutes);
 
 io.on("connection", (socket) => {
   console.log("Client connected ", socket.id);
