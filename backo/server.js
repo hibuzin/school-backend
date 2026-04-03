@@ -17,8 +17,8 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.log("MongoDB error ", err));
 
 
-const locationRoutes = require("./routes/location")(io);
-app.use("/api/location", locationRoutes);
+const locationRoutes = require("./routes/bus")(io);
+app.use("/api/bus", busRoutes);
 
 io.on("connection", (socket) => {
   console.log("Client connected ", socket.id);
