@@ -5,7 +5,7 @@ const Bus = require("../models/bus");
 module.exports = (io) => {
     const router = express.Router();
 
-    
+
     router.post("/location", async (req, res) => {
         try {
             const { busId, latitude, longitude } = req.body;
@@ -16,7 +16,7 @@ module.exports = (io) => {
                 { upsert: true, new: true }
             );
 
-            
+
             io.emit("location-update", bus);
 
             res.json({ success: true, bus });
@@ -26,7 +26,7 @@ module.exports = (io) => {
         busController.updateLocation(req, res, io);
     });
 
-    
+
     router.get("/location/:busId", async (req, res) => {
         try {
             const bus = await Bus.findOne({ busId: req.params.busId });
@@ -39,5 +39,20 @@ module.exports = (io) => {
         }
     });
 
+
+
+    router.get("/gps", async (req, res) => {
+        const { busId, lat, lng } = req.query;
+
+        const bus = await Bus.findOneAndUpdate(
+            { busId },
+            { latitude: lat, longitude: lng, updatedAt: new Date() },
+            { upsert: true, new: true }
+        );
+
+        io.emit("location-update", bus);
+
+        res.send("OK");
+    });
     return router;
 };
